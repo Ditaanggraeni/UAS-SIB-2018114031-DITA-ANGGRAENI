@@ -81,7 +81,27 @@ class SemesterController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'semester' => 'required|max:255',
+        ]);
+
+        $smt = Semester::find($id)->update([
+            'semester'     => $request->semester,
+        ]);
+
+        if($smt){
+            return response()->json([ 
+                'success' => true,
+                'message' => 'Semester berhasil di update',
+                'data' => $smt
+            ], 200); //http status code sukses
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Semester gagal di update',
+                'data' => $smt
+            ], 409); //http status code conflict
+        }
     }
 
     /**
@@ -92,6 +112,12 @@ class SemesterController extends Controller
      */
     public function destroy($id)
     {
-        //
+         $del = Semester::find($id)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Semester berhasil dihapus',
+            'data' => $del
+        ], 200);
     }
 }
